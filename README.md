@@ -1,6 +1,16 @@
 # library-of-babel
 A simple audiobook player for listening to offline .m4b files. Made in C# using Avalonia UI.
 
+<details>
+<summary>Screenshots</summary>
+  
+![alt text](https://github.com/Momonyaro/library-of-babel/blob/main/Examples/example_1.png)
+![alt text](https://github.com/Momonyaro/library-of-babel/blob/main/Examples/example_2.png)
+![alt text](https://github.com/Momonyaro/library-of-babel/blob/main/Examples/example_3.png)
+</details>
+
+<br>
+
 **NOTE: This was a one-off thing for personal use, I will not be taking feature requests and any possible future changes will be for my own personal gain.**
 
 This project started out as a curiosity about what an .m4b file was. From there, I tried to build a parser but quickly realized that due to the file format being a version of MPEG-4, I was essentially rebuilding ffmpeg and gave up.
@@ -9,11 +19,18 @@ Instead I started looking into how viable it would be to make a simple local pla
 
 ---
 
+### Features
+* Allows for either direct file imports or directory imports if you have a generalized folder for your .m4b files.
+* Mark books as favorites and/or if you've finished them. (Books will automatically be marked as finished when the media reaches the end.)
+
 ### Setting it up
 This baby is ffmpeg all the way down so it's a given that you need to have it installed.
 Having ffmpeg installed and set up on your $PATH is needed for the scanning and image fetching to work.
 
 Verify that this is the case by opening up the terminal/cmd and typing: ```ffmpeg``` or ```ffmpeg --version```
+
+Along with this you will also need Avalonia UI, the SVG Avalonia addon and lastly LibVLC which handles the media playback.
+I don't know how this works exactly but you can use the .csproj file to see exactly what the dependencies are.
 
 From here you should be able to open the project in an editor of your choice, I used VSCode while making it cause of Avalonias preview extension. Calling ```dotnet run``` or clicking the start button should hopefully, if you have your fingers crossed start a version of the app.
 
