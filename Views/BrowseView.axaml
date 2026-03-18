@@ -1,0 +1,135 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:AudiobookPlayer.ViewModels"
+             xmlns:cc="clr-namespace:AudiobookPlayer.Controls"
+             xmlns:local="using:Babel.Converters"
+             x:Class="AudiobookPlayer.Views.BrowseView"
+             x:DataType="vm:MainWindowViewModel">
+
+    <Grid Margin="8 8 8 0" RowDefinitions="Auto, Auto, *, Auto" RowSpacing="8">
+        <cc:AppHeader Grid.Row="0"/>
+        <cc:PillControl Grid.Row="1" SelectedTab="{Binding BrowseTab}" />
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Grid.Row="2">
+            <ItemsControl ItemsSource="{Binding FilteredBooks}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="2" VerticalAlignment="Top"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Button Classes="card" Margin="0 0 8 8" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                Command="{Binding DataContext.OpenAudiobookCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}">
+                                <Panel>
+                                    <Border BorderBrush="White" Classes="gridItem" BorderThickness="1" CornerRadius="8" ClipToBounds="True">
+                                        <Grid RowDefinitions="*, Auto, Auto, Auto" ColumnDefinitions="*" Background="White">
+                                            <Border Grid.Row="0"
+                                                    CornerRadius="7 7 0 0"
+                                                    ClipToBounds="True"
+                                                    Background="Gray">
+
+                                                <Grid>
+                                                    <TextBlock Text="?"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            FontSize="48"
+                                                            Foreground="DarkGray" />
+
+                                                    <Image Source="{Binding CoverArt}"
+                                                        Stretch="UniformToFill"
+                                                        IsVisible="{Binding HasCoverArt}" />
+                                                </Grid>
+                                            </Border>
+                                            <TextBlock Grid.Row="1" Text="{Binding Title}"
+                                                    Foreground="Black" FontWeight="Bold" FontSize="14"
+                                                    TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
+                                                    Padding="8 8 8 4" ToolTip.Tip="{Binding Title}" />
+                                            <TextBlock Grid.Row="2" FontSize="12" Text="{Binding Series}" IsVisible="{Binding HasSeries}"
+                                                    Foreground="Black" FontWeight="Regular"
+                                                    TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
+                                                    Padding="8 0 8 0" ToolTip.Tip="{Binding Series}" />
+                                            <TextBlock Grid.Row="3" Foreground="Black" FontWeight="Regular" FontSize="12"
+                                                    TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
+                                                    Padding="8 0 8 8" ToolTip.Tip="{Binding Author}" >
+                                                <Run Text="by" />
+                                                <Run Text="{Binding Author}" />
+                                            </TextBlock>
+                                        </Grid>
+                                    </Border>
+                                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8" Spacing="4">
+                                        <PathIcon
+                                            Width="24"
+                                            Height="24"
+                                            Data="M5 16L7 16L15 8L7 -2.7818e-08L5 0L5 16Z"
+                                            Foreground="LimeGreen" 
+                                            IsVisible="{Binding IsPlaying}"
+                                            IsHitTestVisible="False"
+                                        />
+                                        <PathIcon 
+                                            Width="24"
+                                            Height="24"
+                                            Data="M9.00001 0H7.00001L5.51292 4.57681L0.700554 4.57682L0.0825195 6.47893L3.97581 9.30756L2.48873 13.8843L4.10677 15.0599L8.00002 12.2313L11.8933 15.0599L13.5113 13.8843L12.0242 9.30754L15.9175 6.47892L15.2994 4.57681L10.4871 4.57681L9.00001 0Z"
+                                            Foreground="Gold"
+                                            IsVisible="{Binding Favorite}"
+                                        />
+                                        <PathIcon 
+                                            Width="24"
+                                            Height="24"
+                                            Data="M15.4141 4.91424L5.99991 14.3285L0.585693 8.91424L3.41412 6.08582L5.99991 8.6716L12.5857 2.08582L15.4141 4.91424Z"
+                                            Foreground="SkyBlue"
+                                            IsVisible="{Binding Finished}"
+                                        />
+                                    </StackPanel>
+                                </Panel>
+                            </Button>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        <Border Grid.Row="3" BorderBrush="White" BorderThickness="0 1 0 0" Padding="0 8 0 0" Margin="0 0 0 8"
+            IsVisible="{Binding CurrentAudiobook.CurrentExists}">
+            <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="8">
+                <Button Grid.Column="0" Classes="card" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                Command="{Binding DataContext.OpenPlayerViewCommand, RelativeSource={RelativeSource AncestorType=Window}}">
+                    <Border HorizontalAlignment="Left" >
+                        <Panel Width="56" Height="56" Background="Gray">
+                            <TextBlock Text="?" TextAlignment="Center" VerticalAlignment="Center" FontSize="32" Foreground="DarkGray" />
+                            <Image Source="{Binding CurrentAudiobook.CurrentCover}" Stretch="UniformToFill" IsVisible="{Binding CurrentAudiobook.CurrentHasCover}" />
+                        </Panel>
+                    </Border>
+                </Button>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="0" >
+                    <TextBlock Text="{Binding CurrentAudiobook.CurrentTitle}" Foreground="White" FontSize="14" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" />
+                    <TextBlock Text="{Binding CurrentAudiobook.CurrentChapter}" Foreground="Gray" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" />
+                    <TextBlock Text="{Binding CurrentAudiobook.CurrentTimeRemaining}" Foreground="Gray" FontSize="12" />
+                </StackPanel>
+                <Button Classes="card" Grid.Column="2" CornerRadius="99" Margin="0 0 8 0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                Command="{Binding DataContext.TogglePlaybackCommand, RelativeSource={RelativeSource AncestorType=Window}}">
+                    <Border CornerRadius="99" Background="#efefef" >
+                        <Panel Width="56">
+                            <PathIcon
+                                Width="24"
+                                Height="24"
+                                Data="M5 16L7 16L15 8L7 -2.7818e-08L5 0L5 16Z"
+                                Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4 0 0 0"
+                                IsVisible="{Binding !CurrentAudiobook.CurrentIsPlaying}"
+                            />
+                            <PathIcon
+                                Width="24"
+                                Height="24"
+                                Data="M7 1H2V15H7V1Z M14 1H9V15H14V1Z"
+                                Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 0 0"
+                                IsVisible="{Binding CurrentAudiobook.CurrentIsPlaying}" 
+                            />
+                        </Panel>
+                    </Border>
+                </Button>
+            </Grid>
+        </Border>
+    </Grid>
+
+</UserControl>

@@ -1,0 +1,124 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:AudiobookPlayer.ViewModels"
+             xmlns:local="using:Babel.Converters"
+             xmlns:cc="clr-namespace:AudiobookPlayer.Controls"
+             x:Class="AudiobookPlayer.Views.DetailsView"
+             x:DataType="vm:AudiobookDetailsTuple">
+
+    <UserControl.Resources>
+		<local:EnumToBooleanConverter x:Key="EnumToBool"/>
+	</UserControl.Resources>
+
+    <Grid Margin="8" RowDefinitions="Auto, *" RowSpacing="8">
+        <!-- Back Button -->
+        <Panel Grid.Row="0" VerticalAlignment="Top">
+            <Button Content="Back" Padding="6" FontSize="16" HorizontalAlignment="Left"
+                    Command="{Binding DataContext.ResetToBrowseCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+				<Button HorizontalAlignment="Left" ToolTip.Tip="Finished" Padding="6"
+                Command="{Binding DataContext.ToggleSelectedFinishedCommand, RelativeSource={RelativeSource AncestorType=Window}}">
+					<Panel>
+                        <PathIcon 
+                            Width="20"
+                            Height="20"
+                            Data="M15.4141 4.91424L5.99991 14.3285L0.585693 8.91424L3.41412 6.08582L5.99991 8.6716L12.5857 2.08582L15.4141 4.91424Z"
+                            Foreground="Gray"
+                        />
+                        <PathIcon 
+                            Width="20"
+                            Height="20"
+                            Data="M15.4141 4.91424L5.99991 14.3285L0.585693 8.91424L3.41412 6.08582L5.99991 8.6716L12.5857 2.08582L15.4141 4.91424Z"
+                            Foreground="SkyBlue"
+                            IsVisible="{Binding DataContext.SelectedFinished, RelativeSource={RelativeSource AncestorType=Window}}"
+                        />
+                    </Panel>
+				</Button>
+                <Button HorizontalAlignment="Left" ToolTip.Tip="Favorite" Padding="6"
+                Command="{Binding DataContext.ToggleSelectedFavoriteCommand, RelativeSource={RelativeSource AncestorType=Window}}">
+					<Panel>
+                        <PathIcon 
+                            Width="20"
+                            Height="20"
+                            Data="M9.00001 0H7.00001L5.51292 4.57681L0.700554 4.57682L0.0825195 6.47893L3.97581 9.30756L2.48873 13.8843L4.10677 15.0599L8.00002 12.2313L11.8933 15.0599L13.5113 13.8843L12.0242 9.30754L15.9175 6.47892L15.2994 4.57681L10.4871 4.57681L9.00001 0Z"
+                            Foreground="Gray"
+                        />
+                        <PathIcon 
+                            Width="20"
+                            Height="20"
+                            Data="M9.00001 0H7.00001L5.51292 4.57681L0.700554 4.57682L0.0825195 6.47893L3.97581 9.30756L2.48873 13.8843L4.10677 15.0599L8.00002 12.2313L11.8933 15.0599L13.5113 13.8843L12.0242 9.30754L15.9175 6.47892L15.2994 4.57681L10.4871 4.57681L9.00001 0Z"
+                            Foreground="Gold"
+                            IsVisible="{Binding DataContext.SelectedFavorited, RelativeSource={RelativeSource AncestorType=Window}}"
+                        />
+                    </Panel>
+				</Button>
+			</StackPanel>
+        </Panel>
+
+        <ScrollViewer Grid.Row="1">
+            <Grid RowDefinitions="Auto, Auto, *" RowSpacing="8">
+                <!-- Cover Art -->
+                <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Center" Margin="8">
+                    <Border CornerRadius="8" ClipToBounds="True" Margin="8" HorizontalAlignment="Center"
+                            IsVisible="{Binding ListItem.HasCoverArt}">
+                        <Border.Effect>
+                            <DropShadowEffect Color="#000000"
+                                                BlurRadius="4"
+                                                OffsetX="8"
+                                                OffsetY="8" />
+                        </Border.Effect>
+                        <Image Source="{Binding ListItem.CoverArt}"
+                            Width="192" Height="192" />
+                    </Border>
+                    <TextBlock Text="{Binding ListItem.Title}" TextAlignment="Center" FontWeight="Bold" TextWrapping="Wrap" FontSize="18" Padding="0 8 0 0" />
+                    <TextBlock Text="{Binding ListItem.DurationString}" TextAlignment="Center" Foreground="Gray" FontWeight="Bold" TextWrapping="Wrap" FontSize="12" Padding="0 0 0 4" />
+                    <Button Content="Play Audiobook" HorizontalAlignment="Center" CornerRadius="32" Padding="16 8" FontSize="14" Command="{Binding DataContext.PlaySelectedAudiobookCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                </StackPanel>
+
+                <cc:PillSubControl Grid.Row="1" SelectedTab="{Binding DataContext.DetailsContentTab, RelativeSource={RelativeSource AncestorType=Window}, Mode=TwoWay}" />
+
+                <!-- Details -->
+                <StackPanel Grid.Row="2" Margin="8" Spacing="4"
+                    IsVisible="{Binding DataContext.DetailsContentTab, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource EnumToBool}, ConverterParameter=Details}">
+                    <Grid ColumnDefinitions="*, *" RowDefinitions="*, *" RowSpacing="4">
+                        <TextBlock Grid.Column="0" Grid.Row="0" Text="Written By" FontWeight="SemiBold" FontSize="16" />
+                        <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding Audiobook.Author}" TextWrapping="Wrap" FontSize="12" Margin="0 0 0 16" />
+
+                        <TextBlock Grid.Column="1" Grid.Row="0" Text="Narrated By" FontWeight="SemiBold" FontSize="16" />
+                        <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Audiobook.Narrator}" TextWrapping="Wrap" FontSize="12" Margin="0 0 0 16" />
+                    </Grid>
+
+                    <TextBlock Text="Series" FontWeight="SemiBold" FontSize="16" IsVisible="{Binding ListItem.HasSeries}" />
+                    <TextBlock Text="{Binding ListItem.Series}" TextWrapping="Wrap" FontSize="12" IsVisible="{Binding ListItem.HasSeries}" Margin="0 0 0 16" />
+
+                    <TextBlock Text="Summary" FontWeight="SemiBold" FontSize="16" />
+                    <TextBlock Text="{Binding Audiobook.Description}" TextWrapping="Wrap" FontSize="12" />
+                </StackPanel>
+
+                <!-- Chapters Section -->
+                <StackPanel Grid.Row="3" Margin="8" Spacing="0"
+                            IsVisible="{Binding DataContext.DetailsContentTab, 
+                                                RelativeSource={RelativeSource AncestorType=Window}, 
+                                                Converter={StaticResource EnumToBool}, 
+                                                ConverterParameter=Chapters}">
+                    <TextBlock Text="Chapters" FontWeight="SemiBold" FontSize="16" Margin="0 0 0 8"/>
+
+                    <ItemsControl ItemsSource="{Binding Audiobook.Chapters}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Padding="8" HorizontalContentAlignment="Stretch"
+                                        Command="{Binding DataContext.PlaySelectedAudiobookFromChapterCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding ID}" >
+                                    <Grid ColumnDefinitions="*, Auto" ColumnSpacing="8">
+                                        <TextBlock Grid.Column="0" Text="{Binding Name}" FontSize="14" TextWrapping="Wrap"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding ChapterDurationString}" HorizontalAlignment="Right" TextAlignment="Right" FontSize="14" TextWrapping="Wrap" Foreground="Gray"/>
+                                    </Grid>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

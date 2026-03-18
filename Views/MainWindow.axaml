@@ -1,0 +1,76 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:AudiobookPlayer.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:anim="https://github.com/whistyun/AnimatedImage.Avalonia"
+        xmlns:cc="clr-namespace:AudiobookPlayer.Controls"
+        xmlns:local="using:Babel.Converters"
+        xmlns:views="using:AudiobookPlayer.Views"
+        mc:Ignorable="d"
+        x:Class="AudiobookPlayer.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Library of Babel"
+        CanResize="False"
+        Width="450" Height="700">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+        to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Window.KeyBindings>
+        <KeyBinding Gesture="Escape"
+                    Command="{Binding ResetToBrowseCommand}" />
+    </Window.KeyBindings>
+    
+    <Window.Resources>
+		<local:EnumToBooleanConverter x:Key="EnumToBool"/>
+	</Window.Resources>
+
+    <Border>
+        <Border.Background>
+            <RadialGradientBrush RadiusX="800" RadiusY="1000" Center=".5, .5" GradientOrigin=".5, .5">
+                <!-- Outer edge glow -->
+                <GradientStop Color="#1c1c1c" Offset="0"/>
+                <GradientStop Color="#111111" Offset=".2"/>
+                <GradientStop Color="#070707" Offset=".5"/>
+                <GradientStop Color="#111111" Offset=".8"/>
+                <GradientStop Color="#1c1c1c" Offset="1"/>
+            </RadialGradientBrush>
+        </Border.Background>
+
+        <Panel Background="Transparent">
+            <views:BrowseView 
+                IsVisible="{Binding CurrentView, Converter={StaticResource EnumToBool}, ConverterParameter=Browse}"
+                IsHitTestVisible="{Binding CurrentView, Converter={StaticResource EnumToBool}, ConverterParameter=Browse}"
+                IsEnabled="{Binding CurrentView, Converter={StaticResource EnumToBool}, ConverterParameter=Browse}" />
+
+            <ContentControl Content="{Binding SelectedAudiobook}"
+                IsVisible="{Binding CurrentView, Converter={StaticResource EnumToBool}, ConverterParameter=Details}"
+                IsHitTestVisible="{Binding CurrentView, Converter={StaticResource EnumToBool}, ConverterParameter=Details}"
+                IsEnabled="{Binding CurrentView, Converter={StaticResource EnumToBool}, ConverterParameter=Details}" >
+                <ContentControl.ContentTemplate>
+                    <DataTemplate>
+                        <views:DetailsView DataContext="{Binding}" />
+                    </DataTemplate>
+                </ContentControl.ContentTemplate>
+            </ContentControl>
+
+            <views:PlayerView 
+                IsVisible="{Binding CurrentView, Converter={StaticResource EnumToBool}, ConverterParameter=Player}"
+                IsHitTestVisible="{Binding CurrentView, Converter={StaticResource EnumToBool}, ConverterParameter=Player}"
+                IsEnabled="{Binding CurrentView, Converter={StaticResource EnumToBool}, ConverterParameter=Player}" />
+
+            <Panel Background="#080808" Opacity="0.95" IsHitTestVisible="{Binding IsLoading}" IsVisible="{Binding IsLoading}">
+                <StackPanel VerticalAlignment="Center" Spacing="16" HorizontalAlignment="Center">
+                    <Image Width="64" Height="64" anim:ImageBehavior.AnimatedSource="avares://AudiobookPlayer/Assets/loader.gif"></Image>
+                    <TextBlock>Syncing Library...</TextBlock>
+                </StackPanel>
+            </Panel>
+        </Panel>
+    </Border>
+
+</Window>

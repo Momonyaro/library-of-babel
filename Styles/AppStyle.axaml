@@ -1,0 +1,77 @@
+<Styles xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:cc="clr-namespace:AudiobookPlayer.Controls">
+	<Design.PreviewWith>
+		<Border Padding="20">
+			<!-- Add Controls for Previewer Here -->
+			<ToolTip>Test</ToolTip>
+		</Border>
+	</Design.PreviewWith>
+
+	<!-- Add Styles Here -->
+	<Style Selector="Window">
+		<Setter Property="Foreground" Value="White" />
+	</Style>
+
+	<Style Selector="StackPanel">
+		<Setter Property="Spacing" Value="4" />
+	</Style>
+
+	<Style Selector="ToolTip">
+		<Setter Property="Background" Value="Black"></Setter>
+		<Setter Property="Foreground" Value="White"/>
+		<Setter Property="Padding" Value="8 4 8 4"></Setter>
+	</Style>
+
+	<Style Selector="ProgressBar">
+		<Setter Property="Height" Value="2"></Setter>
+		<Setter Property="Template">
+			<ControlTemplate>
+				<!-- Track -->
+				<Border x:Name="PART_Track"
+						Background="Transparent"
+						CornerRadius="6"
+						ClipToBounds="True">
+					<!-- Indicator -->
+					<Border x:Name="PART_Indicator"
+							Background="White"
+							HorizontalAlignment="Left"
+							CornerRadius="6"/>
+				</Border>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+
+	<Style Selector="Border.gridItem">
+		<Setter Property="Opacity" Value="1"></Setter>
+
+		<Style Selector="^:pointerover">
+			<Setter Property="Opacity" Value="0.9"></Setter>
+		</Style>
+
+		<Style Selector="^:pressed">
+			<Setter Property="Opacity" Value="0.8"></Setter>
+		</Style>
+	</Style>
+
+	<Style Selector="Button">
+		<Setter Property="CornerRadius" Value="8"></Setter>
+		<Setter Property="BorderBrush" Value="White"></Setter>
+		<Setter Property="Background" Value="Black"></Setter>
+		<Setter Property="Foreground" Value="White"/>
+		<Setter Property="Padding" Value="8 4 8 4"></Setter>
+
+		<Style Selector="^:pointerover">
+			<Setter Property="Background" Value="White"/>
+			<Setter Property="Foreground" Value="Black"/>
+		</Style>
+	</Style>
+
+	<Style Selector="Button.card">
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="Padding" Value="0"/>
+	</Style>
+
+
+</Styles>

@@ -1,0 +1,60 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:Babel.Converters"
+             x:Class="AudiobookPlayer.Controls.PillSubControl"
+             x:Name="pillSubControl">
+
+    <UserControl.Resources>
+        <local:EnumToBooleanConverter x:Key="EnumToBool"/>
+        <local:EnumToColorConverter x:Key="EnumToColor"/>
+        <local:EnumToForegroundConverter x:Key="EnumToForeground"/>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="RadioButton.pill">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}" CornerRadius="8" MinHeight="32">
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Margin="{TemplateBinding Padding}"
+                                          Foreground="{TemplateBinding Foreground}"
+                                          FontSize="16"
+                                          FontWeight="Black"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                    <BrushTransition Property="Foreground" Duration="0:0:0.2"/>
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="RadioButton.pill TextBlock">
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Border BorderThickness="1" BorderBrush="White" CornerRadius="10" Padding="2" Background="Transparent">
+        <Grid ColumnDefinitions="*, *" ColumnSpacing="2">
+
+            <!-- Details -->
+            <RadioButton Grid.Column="0" Classes="pill" Content="Details"
+                         IsChecked="{Binding DataContext.DetailsContentTab, Converter={StaticResource EnumToBool}, ConverterParameter=Details, Mode=OneWay, RelativeSource={RelativeSource AncestorType=Window}}"
+                         Command="{Binding DataContext.SetDetailsTabCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                         CommandParameter="Details"
+                         Background="{Binding DataContext.DetailsContentTab, Converter={StaticResource EnumToColor}, ConverterParameter=Details, RelativeSource={RelativeSource AncestorType=Window}}"
+                         Foreground="{Binding DataContext.DetailsContentTab, Converter={StaticResource EnumToForeground}, ConverterParameter=Details, RelativeSource={RelativeSource AncestorType=Window}}" />
+
+            <!-- Chapters -->
+            <RadioButton Grid.Column="1" Classes="pill" Content="Chapters"
+                         IsChecked="{Binding DataContext.DetailsContentTab, Converter={StaticResource EnumToBool}, ConverterParameter=Chapters, Mode=OneWay, RelativeSource={RelativeSource AncestorType=Window}}"
+                         Command="{Binding DataContext.SetDetailsTabCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                         CommandParameter="Chapters"
+                         Background="{Binding DataContext.DetailsContentTab, Converter={StaticResource EnumToColor}, ConverterParameter=Chapters, RelativeSource={RelativeSource AncestorType=Window}}"
+                         Foreground="{Binding DataContext.DetailsContentTab, Converter={StaticResource EnumToForeground}, ConverterParameter=Chapters, RelativeSource={RelativeSource AncestorType=Window}}" />
+        </Grid>
+    </Border>
+</UserControl>
